@@ -6,7 +6,8 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.Observer
+import androidx.navigation.NavOptions
+import androidx.navigation.fragment.findNavController
 import org.koin.android.ext.android.inject
 import unii.entertainment.movie.movieapp.R
 import unii.entertainment.movie.movieapp.databinding.SplashFragmentBindingImpl
@@ -37,10 +38,22 @@ class SplashFragment : Fragment() {
 
     private fun observe() {
         viewModel.initApp.observe(this@SplashFragment.viewLifecycleOwner, { init ->
-            if (init) {
-                //TODO: go away from this view
+            if (!init) {
+                moveToNextView()
             }
         })
+    }
+
+    private fun moveToNextView() {
+        findNavController().navigate(
+            R.id.action_splashFragment_to_movieListFragment,
+            null,
+            NavOptions.Builder()
+                .setPopUpTo(
+                    R.id.splashFragment,
+                    true
+                ).build()
+        )
     }
 
 }
