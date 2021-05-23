@@ -11,12 +11,13 @@ import unii.entertainment.movie.movieapp.ui.splash.SplashFragment
 import unii.entertainment.movie.movieapp.ui.splash.SplashViewModel
 
 val appModule = module {
-}
-
-val fragmentModule = module {
     fragment { SplashFragment() }
     fragment { MovieListFragment() }
     fragment { MovieDetailFragment() }
+}
+
+val fragmentModule = module {
+
 }
 
 val viewModelModule = module {

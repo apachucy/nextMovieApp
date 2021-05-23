@@ -1,4 +1,11 @@
 <resources>
-    <string name="app_name">MovieApp</string>
     <string name="splash_screen">Popcorn Splash Screen for initializing resources</string>
+
+    <string name="placeholder">--</string>
+    <string name="vote_count" formatted="false">%s reviews</string>
+    <string name="category_now_playing">Now Playing</string>
+    <string name="category_popular">Popular</string>
+    <string name="category_top_rated">Top Rated</string>
+    <string name="category_upcoming">Upcoming</string>
+    <string name="network_error">Error with getting data %1$s</string>
 </resources>

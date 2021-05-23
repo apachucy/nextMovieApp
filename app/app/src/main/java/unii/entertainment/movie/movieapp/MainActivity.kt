@@ -1,10 +1,9 @@
 package unii.entertainment.movie.movieapp
 
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import androidx.appcompat.app.AppCompatActivity
 import org.koin.androidx.fragment.android.setupKoinFragmentFactory
 import org.koin.core.KoinExperimentalAPI
-import unii.entertainment.movie.movieapp.ui.splash.SplashFragment
 
 class MainActivity : AppCompatActivity() {
 
@@ -15,10 +14,6 @@ class MainActivity : AppCompatActivity() {
 
         super.onCreate(savedInstanceState)
         setContentView(R.layout.main_activity)
-      /*  if (savedInstanceState == null) {
-            supportFragmentManager.beginTransaction()
-                    .replace(R.id.container, SplashFragment.newInstance())
-                    .commitNow()
-        }*/
+
     }
 }

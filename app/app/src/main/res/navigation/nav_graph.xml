@@ -18,6 +18,9 @@
         <action
             android:id="@+id/action_movieListFragment_to_movieDetailFragment"
             app:destination="@id/movieDetailFragment" />
+        <argument
+            android:name="movieId"
+            app:argType="string" />
     </fragment>
     <fragment
         android:id="@+id/movieDetailFragment"

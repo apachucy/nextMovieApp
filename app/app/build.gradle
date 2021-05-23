@@ -2,6 +2,7 @@ plugins {
     id 'com.android.application'
     id 'kotlin-android'
     id 'kotlin-kapt'
+    id("androidx.navigation.safeargs.kotlin")
 }
 
 android {
@@ -17,13 +18,31 @@ android {
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
-
     buildTypes {
         release {
+            debuggable false
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+            resValue "string", "app_name", "Movie App (Prod)"
+            signingConfig signingConfigs.debug
+
         }
+        debug {
+            debuggable true
+            minifyEnabled true
+            applicationIdSuffix ".debug"
+            resValue "string", "app_name", "Movie App (Development)"
+        }
+        qa {
+            debuggable true
+            minifyEnabled true
+            applicationIdSuffix ".qa"
+            resValue "string", "app_name", "Movie App (QA)"
+            signingConfig signingConfigs.debug
+        }
+
     }
+
     compileOptions {
         sourceCompatibility JavaVersion.VERSION_1_8
         targetCompatibility JavaVersion.VERSION_1_8
@@ -34,15 +53,41 @@ android {
 
     buildFeatures {
         dataBinding true
-
-        //TODO: learn later
-        //viewBinding = true
-
-
+        viewBinding true
     }
+    flavorDimensions 'API'
+    productFlavors {
+        apiMocked {
+            dimension 'API'
+            buildConfigField "String", "BASE_URL", '"https://api.themoviedb.org/3/"'
+        }
+        apiProduction {
+            dimension 'API'
+            buildConfigField "String", "BASE_URL", '"https://api.themoviedb.org/3/"'
+        }
+    }
+    variantFilter { variant ->
+        def names = variant.flavors*.name
+        if (variant.buildType.name == "qa") {
+            if (names.contains("apiMocked") ){
+                setIgnore(true)
+            }
+        }
+    }
+
 }
 
-
+//Not working from Google Developers :(
+/*
+androidComponents {
+    beforeVariants { variantBuilder ->
+        // To check for a certain build type, use variantBuilder.buildType == "<buildType>"
+        if (variantBuilder.buildType == "qa" && variantBuilder.productFlavors.contains("apiMocked")) {
+            // Gradle ignores any variants that satisfy the conditions above.
+            variantBuilder.enabled = false
+        }
+    }
+}*/
 //TODO: migrate me to kotlin-dsl
 project.ext {
     koin_version = "3.0.2"
@@ -68,7 +113,7 @@ dependencies {
 // Koin Android - experimental builder extensions
     implementation "io.insert-koin:koin-android-ext:$koin_version"
     // Testing
-    testImplementation "org.koin:koin-test:$koin_version"
+   // testImplementation "org.koin:koin-test:$koin_version"
 
     implementation "org.jetbrains.kotlinx:kotlinx-coroutines-core:$coroutines_version"
     implementation "org.jetbrains.kotlinx:kotlinx-coroutines-android:$coroutines_version"
@@ -82,4 +127,16 @@ dependencies {
 
     // Testing Navigation
     androidTestImplementation("androidx.navigation:navigation-testing:$nav_version")
+
+    //retrofit:
+    implementation 'com.squareup.retrofit2:retrofit:2.9.0'
+    implementation 'com.google.code.gson:gson:2.8.6'
+    implementation "com.squareup.okhttp3:logging-interceptor:4.8.0"
+    implementation "com.squareup.retrofit2:converter-gson:2.9.0"
+    implementation "com.squareup.okhttp3:okhttp:4.8.0"
+
+    //TODO: change later to flow
+
+    implementation 'com.github.bumptech.glide:glide:4.12.0'
+    kapt 'com.github.bumptech.glide:compiler:4.12.0'
 }
