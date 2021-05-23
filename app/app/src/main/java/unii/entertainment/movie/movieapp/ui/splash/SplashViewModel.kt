@@ -8,8 +8,11 @@ import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
 class SplashViewModel : ViewModel() {
-    private val progressbarDelay: Long = 5_000
     private var _shouldInitApp: MutableLiveData<Boolean> = MutableLiveData(true)
+
+    companion object {
+        const val progressbarDelay: Long = 5_000
+    }
 
     val initApp: LiveData<Boolean>
         get() = _shouldInitApp

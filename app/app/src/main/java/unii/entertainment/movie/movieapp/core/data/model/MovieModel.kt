@@ -17,8 +17,6 @@ data class MovieModel(
     val genreList: List<Genre>? = null,
     val runtime: Int? = null
 ) {
-    //TODO: fix me later
-
     fun posterUrl(): String = "https://image.tmdb.org/t/p/w500/${this.posterPath}"
     fun displayTitle(): String = this.title ?: PLACEHOLDER
     fun display5StarsRating(): String = (this.voteAverage?.div(2) ?: 0.0f).toString()

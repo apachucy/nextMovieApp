@@ -14,9 +14,11 @@ import unii.entertainment.movie.movieapp.ui.movie_list.MovieListFragment
 
 class MovieDetailFragment : Fragment() {
     private val viewModel: MovieDetailViewModel by inject()
-    private var _binding: MovieDetailFragmentBinding? = null
     private val binding get() = _binding!!
     private val fallbackMovieId = "1"
+
+    private var _binding: MovieDetailFragmentBinding? = null
+
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -31,7 +33,16 @@ class MovieDetailFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        observe()
 
+    }
+
+    override fun onDestroy() {
+        _binding = null
+        super.onDestroy()
+    }
+
+    private fun observe() {
         viewModel.fetchDetails(
             arguments?.getString(MovieListFragment.bundleKeyMovie) ?: fallbackMovieId
         ).observe(viewLifecycleOwner, { result ->
@@ -56,7 +67,5 @@ class MovieDetailFragment : Fragment() {
                 }
             }
         })
-
-
     }
 }
