@@ -1,5 +1,7 @@
 package unii.entertainment.movie.movieapp.core.repo
 
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.withContext
 import org.koin.core.component.KoinComponent
 import org.koin.core.component.inject
 import unii.entertainment.movie.movieapp.core.data.model.MovieModel
@@ -26,18 +28,21 @@ class MovieRepoImpl : MovieRepo, KoinComponent {
         list: String,
         page: Int?
     ): Resource<List<MovieModel>> {
-        val response = movieListDataSource.fetchMovieList(list, page)
-        return if (response is Resource.Success) {
-            Resource.Success((response.data.results as List<MovieListResponse>).mapToMovieModels())
-        } else Resource.Failure(Exception("Could not parse model"))
-
+        return withContext(Dispatchers.IO) {
+            val response = movieListDataSource.fetchMovieList(list, page)
+            if (response is Resource.Success) {
+                Resource.Success((response.data.results as List<MovieListResponse>).mapToMovieModels())
+            } else Resource.Failure(Exception("Could not parse model"))
+        }
     }
 
     override suspend fun fetchMovieDetail(movieId: String): Resource<MovieModel> {
-        val response = movieListDataSource.fetchMovieDetail(movieId)
-        return if (response is Resource.Success) {
-            Resource.Success((response.data).mapToMovieModel())
-        } else Resource.Failure(Exception("Could not parse model"))
+        return withContext(Dispatchers.IO) {
+            val response = movieListDataSource.fetchMovieDetail(movieId)
+            if (response is Resource.Success) {
+                Resource.Success((response.data).mapToMovieModel())
+            } else Resource.Failure(Exception("Could not parse model"))
+        }
     }
 
 }

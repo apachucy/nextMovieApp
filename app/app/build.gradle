@@ -19,6 +19,7 @@ android {
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
     buildTypes {
+
         release {
             debuggable false
             minifyEnabled false
@@ -32,6 +33,7 @@ android {
             minifyEnabled true
             applicationIdSuffix ".debug"
             resValue "string", "app_name", "Movie App (Development)"
+
         }
         qa {
             debuggable true
@@ -60,16 +62,18 @@ android {
         apiMocked {
             dimension 'API'
             buildConfigField "String", "BASE_URL", '"https://api.themoviedb.org/3/"'
+            buildConfigField "String", "API_KEY", apiKey
         }
         apiProduction {
             dimension 'API'
             buildConfigField "String", "BASE_URL", '"https://api.themoviedb.org/3/"'
+            buildConfigField "String", "API_KEY", apiKey
         }
     }
     variantFilter { variant ->
         def names = variant.flavors*.name
         if (variant.buildType.name == "qa") {
-            if (names.contains("apiMocked") ){
+            if (names.contains("apiMocked")) {
                 setIgnore(true)
             }
         }
@@ -104,6 +108,7 @@ dependencies {
     implementation 'androidx.constraintlayout:constraintlayout:2.0.4'
     implementation 'androidx.lifecycle:lifecycle-livedata-ktx:2.3.1'
     implementation 'androidx.lifecycle:lifecycle-viewmodel-ktx:2.3.1'
+    implementation 'androidx.swiperefreshlayout:swiperefreshlayout:1.1.0'
     testImplementation 'junit:junit:4.+'
     androidTestImplementation 'androidx.test.ext:junit:1.1.2'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.3.0'
@@ -113,7 +118,7 @@ dependencies {
 // Koin Android - experimental builder extensions
     implementation "io.insert-koin:koin-android-ext:$koin_version"
     // Testing
-   // testImplementation "org.koin:koin-test:$koin_version"
+    // testImplementation "org.koin:koin-test:$koin_version"
 
     implementation "org.jetbrains.kotlinx:kotlinx-coroutines-core:$coroutines_version"
     implementation "org.jetbrains.kotlinx:kotlinx-coroutines-android:$coroutines_version"

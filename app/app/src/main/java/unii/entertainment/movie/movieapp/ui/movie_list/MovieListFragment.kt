@@ -12,6 +12,7 @@ import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import org.koin.android.ext.android.inject
 import unii.entertainment.movie.movieapp.R
+import unii.entertainment.movie.movieapp.core.data.model.MovieModel
 import unii.entertainment.movie.movieapp.core.utils.Resource
 import unii.entertainment.movie.movieapp.databinding.MovieListFragmentBinding
 
@@ -37,7 +38,7 @@ class MovieListFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         setupRecyclerView()
-
+        setupRefreshListener()
         observe()
     }
 
@@ -47,8 +48,15 @@ class MovieListFragment : Fragment() {
         super.onDestroy()
     }
 
+    private fun setupRefreshListener() {
+        binding.movieListSwiperefresh.setOnRefreshListener {
+            viewModel.fetchMovieList()
+            binding.movieListSwiperefresh.isRefreshing = false
+        }
+    }
+
     private fun observe() {
-        viewModel.fetchMoviesList.observe(viewLifecycleOwner, { result ->
+        viewModel.movieListResponse.observe(viewLifecycleOwner, { result ->
             when (result) {
                 is Resource.Loading -> {
                     binding.movieListProgress.visibility = View.VISIBLE
@@ -56,13 +64,7 @@ class MovieListFragment : Fragment() {
                 is Resource.Success -> {
                     binding.movieListProgress.visibility = View.GONE
 
-                    binding.movieListRecyclerView.adapter = MovieListAdapter(
-                        result.data,
-                        object : MovieListAdapter.OnMovieClickListener {
-                            override fun onMovieClick(id: String) {
-                                moveToNextView(id)
-                            }
-                        })
+                    (binding.movieListRecyclerView.adapter as MovieListAdapter).setData(result.data)
                 }
                 is Resource.Failure -> {
                     binding.movieListProgress.visibility = View.GONE
@@ -85,6 +87,14 @@ class MovieListFragment : Fragment() {
                 DividerItemDecoration.VERTICAL
             )
         )
+        binding.movieListRecyclerView.adapter = MovieListAdapter(
+            listOf<MovieModel>().toMutableList(),
+            object : MovieListAdapter.OnMovieClickListener {
+                override fun onMovieClick(id: String) {
+                    moveToNextView(id)
+                }
+            })
+
     }
 
     private fun moveToNextView(movieId: String) {

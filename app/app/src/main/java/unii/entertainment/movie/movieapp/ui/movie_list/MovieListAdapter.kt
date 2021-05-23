@@ -2,12 +2,14 @@ package unii.entertainment.movie.movieapp.ui.movie_list
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import unii.entertainment.movie.movieapp.core.data.model.MovieModel
+import unii.entertainment.movie.movieapp.core.utils.ListDiffUtils
 import unii.entertainment.movie.movieapp.databinding.RowMovieBinding
 
 class MovieListAdapter(
-    private val moviesList: List<MovieModel>,
+    private val moviesList: MutableList<MovieModel>,
     private val itemClickListener: OnMovieClickListener
 ) : RecyclerView.Adapter<BaseViewHolder<*>>() {
 
@@ -15,6 +17,13 @@ class MovieListAdapter(
         fun onMovieClick(id: String)
     }
 
+    fun setData(newList: List<MovieModel>) {
+        val diffCallback = ListDiffUtils(moviesList, newList)
+        val diffResult = DiffUtil.calculateDiff(diffCallback)
+        moviesList.clear()
+        moviesList.addAll(newList)
+        diffResult.dispatchUpdatesTo(this)
+    }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): BaseViewHolder<*> {
 

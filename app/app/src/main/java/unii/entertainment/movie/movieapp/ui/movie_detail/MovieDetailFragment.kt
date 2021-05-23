@@ -40,10 +40,12 @@ class MovieDetailFragment : Fragment() {
                     binding.movieDetailProgress.visibility = View.VISIBLE
                 }
                 is Resource.Success -> {
+                    binding.movieRanking.visibility = View.VISIBLE
                     binding.movieDetailProgress.visibility = View.GONE
                     binding.item = result.data
                 }
                 is Resource.Failure -> {
+                    binding.movieRanking.visibility = View.INVISIBLE
                     binding.movieDetailProgress.visibility = View.GONE
 
                     Toast.makeText(
