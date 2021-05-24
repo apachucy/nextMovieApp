@@ -30,7 +30,8 @@
                 app:imageUrl="@{item.posterUrl}"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
-                tools:background="@tools:sample/backgrounds/scenic" />
+                tools:background="@tools:sample/backgrounds/scenic"
+                android:contentDescription="@string/image_content_description" />
 
             <TextView
                 android:id="@+id/movie_title"
