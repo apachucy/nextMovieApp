@@ -38,7 +38,7 @@ class MovieListFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         setupRecyclerView()
-        setupRefreshListener()
+        setupRefresh()
         observe()
     }
 
@@ -47,6 +47,18 @@ class MovieListFragment : Fragment() {
         _binding = null
         super.onDestroy()
     }
+
+    private fun setupRefresh() {
+        setupFab()
+        setupRefreshListener()
+    }
+
+    private fun setupFab() {
+        binding.movieListFabAction.setOnClickListener {
+            viewModel.fetchMovieList()
+        }
+    }
+
 
     private fun setupRefreshListener() {
         binding.movieListSwiperefresh.setOnRefreshListener {

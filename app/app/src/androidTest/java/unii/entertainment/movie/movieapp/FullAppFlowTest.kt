@@ -18,7 +18,7 @@ import unii.entertainment.movie.movieapp.ui.movie_list.MovieListAdapter
 
 @RunWith(AndroidJUnit4::class)
 class FullAppFlowTest {
-
+    //Test only happy path of app run
     @get:Rule
     var activityRule: ActivityScenarioRule<MainActivity> =
         ActivityScenarioRule(MainActivity::class.java)
